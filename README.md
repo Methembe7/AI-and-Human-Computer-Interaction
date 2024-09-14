@@ -2,8 +2,6 @@
 
 ## Assignments and code for Artificial Intelligence for HCI course 
 
+week 3 assignment 1: Prototype Simple Traditional Chatbot Project
+week 3 assignmemt 2: TBD
 
-Step 1
-`git add -A`
-`git commit -m "some message"`
-`git push`
