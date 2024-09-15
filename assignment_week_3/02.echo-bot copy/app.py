@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
+
 import sys
 import traceback
 from datetime import datetime
@@ -18,7 +19,19 @@ from botbuilder.schema import Activity, ActivityTypes
 from bots import EchoBot
 from config import DefaultConfig
 
+#From https://learn.microsoft.com/en-us/python/... 
+from azure.core.credentials import AzureKeyCredential
+from azure.ai.textanalytics import TextAnalyticsClient 
+
+
 CONFIG = DefaultConfig()
+
+# 2024/9/14 STOP extended for t6 project in MSAI631 
+credential= AzureKeyCredential(Config.API_KEY)
+endpointURI = CONFIG.ENDPOINT_URI
+text_analytics_client = TextAnalyticsClient(endpoint=endpointURI, credential=credential)
+# 2024/9/14 STOP extended for t6 project in MSAI631
+
 
 # Create adapter.
 # See https://aka.ms/about-bot-adapter to learn more about how bots work.
@@ -66,11 +79,15 @@ async def messages(req: Request) -> Response:
     if "application/json" in req.headers["Content-Type"]:
         body = await req.json()
 
-        # Start Reverse the string
-        print(body)
-        body["text"] = body["text"][::-1]
-        print(body)
-        # End Reverse the string
+    
+        # 2024/9/14 MSAI631 - START PERFORM SENTIMENT ANALYSIS HERE 
+        textToUse = body["text"]
+        print(f"textToUse = {textToUse}")
+        documents = [{"id" : "1", "language" : "en", "text" : body["text"]}]
+        response = text_analytics_client.analyze_sentiment(documents)
+        successful_responses = [doc for doc in response if not doc.is_error]
+        body["text"]= successful_responses
+        # 2024/9/14 MSAI631 - STOP PERFORM SENTIMENT ANALYSIS HERE 
 
     else: 
         return Response(status=HTTPStatus.UNSUPPORTED_MEDIA_TYPE)
