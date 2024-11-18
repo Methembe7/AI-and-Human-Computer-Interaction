@@ -1,4 +1,4 @@
-# MSAI_631: AI and HCI 
+# AI and HCI 
 
 ## Assignments and code for Artificial Intelligence for Human Computer Interaction course 
 
